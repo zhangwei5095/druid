@@ -13,7 +13,8 @@ druid.lang = function() {
 		'Spring' : ['Spring' , 'spring监控'],
 		'JSON API' : ['JSON API' , 'JSON API'],
 		'ResetAll' : ['Reset All' , '重置'],
-		
+		'LogAndReset' : ['Log And Reset' , '记录日志并重置'],
+
 		'StatIndex' : ['Stat Index', '统计索引'],
 		'ViewJSONAPI' : ['View JSON API','查看JSON API'],
 		'Version' : ['Version' , '版本'],
@@ -240,6 +241,8 @@ druid.lang = function() {
 		'RequestTimeMillisTotal':['RequestTimeMillisTotal', '总共请求时间'],
 		'RequestInterval':['RequestInterval', '请求间隔'],
 		/**weburi-detail*/
+		'RefreshPeriod':['Refresh Period', '刷新时间'],
+		'SuspendRefresh':['Suspend Refresh', '暂停刷新'],
 		'RequestTimeMillis':['RequestTimeMillis', '请求时间'],
 		'JdbcExecutePeak':['JdbcExecutePeak', 'jdbc执行峰值'],
 		'JdbcFetchRowPeak':['JdbcFetchRowPeak', 'jdbc查询取回行数峰值'],

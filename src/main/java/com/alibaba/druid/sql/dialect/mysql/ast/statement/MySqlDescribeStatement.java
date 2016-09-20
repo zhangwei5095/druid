@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2011 Alibaba Group Holding Ltd.
+ * Copyright 1999-2101 Alibaba Group Holding Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,37 @@
 package com.alibaba.druid.sql.dialect.mysql.ast.statement;
 
 import com.alibaba.druid.sql.ast.SQLName;
+import com.alibaba.druid.sql.ast.statement.SQLDescribeStatement;
 import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlASTVisitor;
+import com.alibaba.druid.sql.visitor.SQLASTVisitor;
 
-public class MySqlDescribeStatement extends MySqlStatementImpl {
+public class MySqlDescribeStatement extends SQLDescribeStatement implements MySqlStatement {
 
-    private SQLName object;
+    private SQLName colName;
 
     public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, object);
+            acceptChild(visitor, colName);
         }
         visitor.endVisit(this);
     }
 
-    public SQLName getObject() {
-        return object;
+    @Override
+    public void accept0(SQLASTVisitor visitor) {
+        if (visitor instanceof MySqlASTVisitor) {
+            accept0((MySqlASTVisitor) visitor);
+        } else {
+            throw new IllegalArgumentException("not support visitor type : " + visitor.getClass().getName());
+        }
     }
 
-    public void setObject(SQLName object) {
-        this.object = object;
+    public SQLName getColName() {
+        return colName;
+    }
+
+    public void setColName(SQLName colName) {
+        this.colName = colName;
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2011 Alibaba Group Holding Ltd.
+ * Copyright 1999-2101 Alibaba Group Holding Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ import com.alibaba.druid.support.logging.LogFactory;
 import com.alibaba.druid.util.OracleUtils;
 
 /**
- * @author wenshao<szujobs@hotmail.com>
+ * @author wenshao [szujobs@hotmail.com]
  */
 public class DruidPooledPreparedStatement extends DruidPooledStatement implements PreparedStatement {
 
@@ -67,10 +67,10 @@ public class DruidPooledPreparedStatement extends DruidPooledStatement implement
     private boolean pooled = false;
 
     public DruidPooledPreparedStatement(DruidPooledConnection conn, PreparedStatementHolder holder) throws SQLException{
-        super(conn, holder.getStatement());
-        this.stmt = holder.getStatement();
+        super(conn, holder.statement);
+        this.stmt = holder.statement;
         this.holder = holder;
-        this.sql = holder.getKey().sql;
+        this.sql = holder.key.sql;
 
         pooled = conn.getConnectionHolder().isPoolPreparedStatements();
         // Remember the defaults
@@ -152,7 +152,7 @@ public class DruidPooledPreparedStatement extends DruidPooledStatement implement
     }
 
     public PreparedStatementKey getKey() {
-        return holder.getKey();
+        return holder.key;
     }
 
     public PreparedStatement getRawPreparedStatement() {
@@ -907,8 +907,8 @@ public class DruidPooledPreparedStatement extends DruidPooledStatement implement
 
     public static class PreparedStatementKey {
 
-        private final String       sql;
-        private final String       catalog;
+        protected final String     sql;
+        protected final String     catalog;
 
         protected final MethodType methodType;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2011 Alibaba Group Holding Ltd.
+ * Copyright 1999-2101 Alibaba Group Holding Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ import com.alibaba.druid.sql.dialect.odps.parser.OdpsExprParser;
 import com.alibaba.druid.sql.dialect.odps.parser.OdpsStatementParser;
 import com.alibaba.druid.sql.dialect.oracle.parser.OracleExprParser;
 import com.alibaba.druid.sql.dialect.oracle.parser.OracleStatementParser;
+import com.alibaba.druid.sql.dialect.phoenix.parser.PhoenixExprParser;
+import com.alibaba.druid.sql.dialect.phoenix.parser.PhoenixStatementParser;
 import com.alibaba.druid.sql.dialect.postgresql.parser.PGExprParser;
 import com.alibaba.druid.sql.dialect.postgresql.parser.PGSQLStatementParser;
 import com.alibaba.druid.sql.dialect.sqlserver.parser.SQLServerExprParser;
@@ -64,6 +66,10 @@ public class SQLParserUtils {
             return new OdpsStatementParser(sql);
         }
 
+        if (JdbcUtils.PHOENIX.equals(dbType)) {
+            return new PhoenixStatementParser(sql);
+        }
+
         return new SQLStatementParser(sql);
     }
 
@@ -92,6 +98,10 @@ public class SQLParserUtils {
         
         if (JdbcUtils.ODPS.equals(dbType)) {
             return new OdpsExprParser(sql);
+        }
+
+        if (JdbcUtils.PHOENIX.equals(dbType)) {
+            return new PhoenixExprParser(sql);
         }
 
         return new SQLExprParser(sql);

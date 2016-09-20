@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2011 Alibaba Group Holding Ltd.
+ * Copyright 1999-2101 Alibaba Group Holding Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ import com.alibaba.druid.sql.ast.statement.SQLSelectOrderByItem;
 import com.alibaba.druid.sql.dialect.db2.visitor.DB2ParameterizedOutputVisitor;
 import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlParameterizedOutputVisitor;
 import com.alibaba.druid.sql.dialect.oracle.visitor.OracleParameterizedOutputVisitor;
+import com.alibaba.druid.sql.dialect.phoenix.visitor.PhoenixParameterizedOutputVisitor;
 import com.alibaba.druid.sql.dialect.postgresql.visitor.PGParameterizedOutputVisitor;
 import com.alibaba.druid.sql.dialect.sqlserver.ast.SQLServerTop;
 import com.alibaba.druid.sql.dialect.sqlserver.visitor.SQLServerParameterizedOutputVisitor;
@@ -66,7 +67,7 @@ public class ParameterizedOutputVisitorUtils {
             stmt.accept(visitor);
         }
 
-        if (visitor.getReplaceCount() == 0 && !parser.getLexer().isHasComment()) {
+        if (visitor.getReplaceCount() == 0 && !parser.getLexer().hasComment()) {
             return sql;
         }
 
@@ -102,6 +103,10 @@ public class ParameterizedOutputVisitorUtils {
             return new DB2ParameterizedOutputVisitor(out);
         }
 
+        if (JdbcUtils.PHOENIX.equals(dbType)) {
+            return new PhoenixParameterizedOutputVisitor(out);
+        }
+
         return new ParameterizedOutputVisitor(out);
     }
 
@@ -116,13 +121,16 @@ public class ParameterizedOutputVisitorUtils {
         x.getExpr().accept(v);
 
         if (x.isNot()) {
-            v.print(" NOT IN (?)");
+            v.print(v.isUppCase() ? " NOT IN (?)" : " not in (?)");
         } else {
-            v.print(" IN (?)");
+            v.print(v.isUppCase() ? " IN (?)" : " in (?)");
         }
 
         if (changed) {
             v.incrementReplaceCunt();
+            if( v instanceof ExportParameterVisitor){
+                ExportParameterVisitorUtils.exportParameter(((ExportParameterVisitor)v).getParameters(), x);
+            }
         }
 
         return false;
@@ -135,6 +143,10 @@ public class ParameterizedOutputVisitorUtils {
 
         v.print('?');
         v.incrementReplaceCunt();
+        
+        if( v instanceof ExportParameterVisitor){
+            ExportParameterVisitorUtils.exportParameter(((ExportParameterVisitor)v).getParameters(), x);
+        }
         return false;
     }
 
@@ -145,15 +157,22 @@ public class ParameterizedOutputVisitorUtils {
 
         v.print('?');
         v.incrementReplaceCunt();
+        if( v instanceof ExportParameterVisitor){
+            ExportParameterVisitorUtils.exportParameter(((ExportParameterVisitor)v).getParameters(), x);
+        }
         return false;
     }
 
     public static boolean visit(ParameterizedVisitor v, SQLCharExpr x) {
         v.print('?');
         v.incrementReplaceCunt();
+        if( v instanceof ExportParameterVisitor){
+            ExportParameterVisitorUtils.exportParameter(((ExportParameterVisitor)v).getParameters(), x);
+        }
         return false;
     }
 
+   
     public static boolean checkParameterize(SQLObject x) {
         if (Boolean.TRUE.equals(x.getAttribute(ParameterizedOutputVisitorUtils.ATTR_PARAMS_SKIP))) {
             return false;
@@ -176,6 +195,10 @@ public class ParameterizedOutputVisitorUtils {
     public static boolean visit(ParameterizedVisitor v, SQLNCharExpr x) {
         v.print('?');
         v.incrementReplaceCunt();
+        
+        if( v instanceof ExportParameterVisitor){
+            ExportParameterVisitorUtils.exportParameter(((ExportParameterVisitor)v).getParameters(), x);
+        }
         return false;
     }
 
@@ -192,18 +215,30 @@ public class ParameterizedOutputVisitorUtils {
 
         v.print('?');
         v.incrementReplaceCunt();
+        
+        if( v instanceof ExportParameterVisitor){
+            ExportParameterVisitorUtils.exportParameter(((ExportParameterVisitor)v).getParameters(), x);
+        }
         return false;
     }
 
     public static boolean visit(ParameterizedVisitor v, SQLVariantRefExpr x) {
         v.print('?');
         v.incrementReplaceCunt();
+        
+        if( v instanceof ExportParameterVisitor){
+            ExportParameterVisitorUtils.exportParameter(((ExportParameterVisitor)v).getParameters(), x);
+        }
         return false;
     }
     
     public static boolean visit(ParameterizedVisitor v, SQLHexExpr x) {
         v.print('?');
         v.incrementReplaceCunt();
+        
+        if( v instanceof ExportParameterVisitor){
+            ExportParameterVisitorUtils.exportParameter(((ExportParameterVisitor)v).getParameters(), x);
+        }
         return false;
     }
 
